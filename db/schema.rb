@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_18_211356) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_18_212932) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,35 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_18_211356) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "media", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "image_url"
+    t.bigint "title_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["title_id"], name: "index_media_on_title_id"
+  end
+
+  create_table "subtitle_streams", force: :cascade do |t|
+    t.string "url"
+    t.string "language"
+    t.string "name"
+    t.bigint "media_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["media_id"], name: "index_subtitle_streams_on_media_id"
+  end
+
+  create_table "titles", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "kind"
+    t.string "image_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -47,4 +76,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_18_211356) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "video_streams", force: :cascade do |t|
+    t.string "url"
+    t.string "language"
+    t.string "name"
+    t.bigint "media_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["media_id"], name: "index_video_streams_on_media_id"
+  end
+
+  add_foreign_key "media", "titles"
+  add_foreign_key "subtitle_streams", "media", column: "media_id"
+  add_foreign_key "video_streams", "media", column: "media_id"
 end
