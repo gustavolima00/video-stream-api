@@ -1,10 +1,9 @@
 require 'net/http'
 require 'uri'
 
-class BlobStorageService
-    def self.get_file(file_path)
-        base_url = ENV['BLOB_STORAGE_URL']
-        uri = URI("#{base_url}/get-file")
+class BlobStorageClient
+    def self.get_file(file_path:)
+        uri = URI("#{BlobStorageClient.base_url}/get-file")
         uri.query = URI.encode_www_form(file_path: file_path)
         file_extension = File.extname(file_path)
         file = Tempfile.new([SecureRandom.hex, file_extension])
@@ -18,5 +17,11 @@ class BlobStorageService
         file.close
 
         file.path
+    end
+
+    private
+
+    def self.base_url
+        ENV['BLOB_STORAGE_URL'] || 'http://localhost:5000'
     end
 end

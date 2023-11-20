@@ -16,7 +16,7 @@ module API
             content_type "application/octet-stream"
             env['api.format'] = :binary
 
-            file_path = BlobStorageService.get_file(params[:path])
+            file_path = BlobStorageClient.get_file(file_path: params[:path])
             file_name = File.basename(file_path)
             header['Content-Disposition'] = "attachment; filename=#{file_name}"
 
