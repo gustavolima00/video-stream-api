@@ -5,9 +5,7 @@ ActiveAdmin.register RawVideo do
   form do |f|
     f.inputs do
       f.input :media
-      f.input :name
       f.file_field :file
-      # outros campos conforme necessário
     end
     f.actions
   end
@@ -16,8 +14,7 @@ ActiveAdmin.register RawVideo do
     def create
       # Lógica para manipular o upload e fazer a chamada da API
       uploaded_file = params[:raw_video][:file]
-      puts uploaded_file.inspect
+      RawVideoService.create(file: uploaded_file, media_id: params[:raw_video][:media_id])
     end
   end
-  
 end

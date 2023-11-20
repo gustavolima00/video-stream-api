@@ -3,26 +3,25 @@ require 'uri'
 require 'json'
 
 class VideoConverterClient
-  def self.send_video(file_path, file_name)
+  def self.send_video(file:)
+    original_filename = file.original_filename
+    file_extension = File.extname(original_filename)
+    file_name = File.basename(SecureRandom.hex, file_extension)
     uri = URI("#{VideoConverterClient.base_url}/raw-videos/send-video")
     uri.query = URI.encode_www_form(fileName: file_name, userUuid: VideoConverterClient.webhook_user_uuid)
-
-    file = File.open(file_path)
-
-    request = Net::HTTP::Post.new(uri)
+    request = Net::HTTP::Put.new(uri)
     form_data = [['file', file]]
     request.set_form form_data, 'multipart/form-data'
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
       http.request(request)
     end
-    file.close
 
     unless response.is_a?(Net::HTTPSuccess)
-      raise "Error sending video to video converter - #{response.body}"
+      raise "Error sending video to video converter - #{response.body} - #{response.code}"
     end
 
-    true
+    JSON.parse(response.body)
   end
 
   def self.get_video(uuid:)
@@ -33,7 +32,7 @@ class VideoConverterClient
     end
 
     unless response.is_a?(Net::HTTPSuccess)
-      raise "Error getting video with uuid #{uuid} - #{response.body}"
+      raise "Error getting video with uuid #{uuid} - #{response.body} - #{response.code}"
     end
 
     JSON.parse(response.body)
@@ -49,7 +48,7 @@ class VideoConverterClient
     end
 
     unless response.is_a?(Net::HTTPSuccess)
-      raise "Error listing videos - #{response.body}"
+      raise "Error listing videos - #{response.body} - #{response.code}"
     end
 
     JSON.parse(response.body)
@@ -65,7 +64,7 @@ class VideoConverterClient
     end
 
     unless response.is_a?(Net::HTTPSuccess)
-      raise "Error registering webhook user - #{response.body}"
+      raise "Error registering webhook user - #{response.body} - #{response.code}"
     end
 
     JSON.parse(response.body)
