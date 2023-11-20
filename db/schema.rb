@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_18_212932) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_20_201853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,19 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_18_212932) do
     t.index ["title_id"], name: "index_media_on_title_id"
   end
 
+  create_table "raw_videos", force: :cascade do |t|
+    t.uuid "uuid", null: false
+    t.string "raw_video_path"
+    t.string "process_subtitles_status"
+    t.string "process_video_status"
+    t.string "external_uuid"
+    t.string "name"
+    t.bigint "media_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["media_id"], name: "index_raw_videos_on_media_id"
+  end
+
   create_table "subtitle_streams", force: :cascade do |t|
     t.string "url"
     t.string "language"
@@ -87,6 +100,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_18_212932) do
   end
 
   add_foreign_key "media", "titles"
+  add_foreign_key "raw_videos", "media", column: "media_id"
   add_foreign_key "subtitle_streams", "media", column: "media_id"
   add_foreign_key "video_streams", "media", column: "media_id"
 end
