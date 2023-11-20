@@ -1,7 +1,7 @@
 ActiveAdmin.register Media do
   permit_params :name, :description, :image_url, 
-                video_streams_attributes: [:id, :name, :language, :url, :_destroy], 
-                subtitle_streams_attributes: [:id, :name, :language, :url, :_destroy]
+                video_streams_attributes: [:id, :name, :language, :path, :_destroy], 
+                subtitle_streams_attributes: [:id, :name, :language, :path, :_destroy]
 
   index do
       column :name
@@ -32,7 +32,7 @@ ActiveAdmin.register Media do
       table_for media.video_streams do
         column :name
         column :language
-        column :url
+        column :path
       end
     end
 
@@ -40,7 +40,7 @@ ActiveAdmin.register Media do
       table_for media.subtitle_streams do
         column :name
         column :language
-        column :url
+        column :path
       end
     end
   end
@@ -57,7 +57,7 @@ ActiveAdmin.register Media do
         f.has_many :video_streams, allow_destroy: true, new_record: true do |video_stream|
           video_stream.input :name
           video_stream.input :language
-          video_stream.input :url
+          video_stream.input :path
         end
       end
 
@@ -65,7 +65,7 @@ ActiveAdmin.register Media do
         f.has_many :subtitle_streams, allow_destroy: true, new_record: true do |subtitle_stream|
           subtitle_stream.input :name
           subtitle_stream.input :language
-          subtitle_stream.input :url
+          subtitle_stream.input :path
         end
       end
 

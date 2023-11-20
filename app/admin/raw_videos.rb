@@ -15,6 +15,16 @@ ActiveAdmin.register RawVideo do
       # Lógica para manipular o upload e fazer a chamada da API
       uploaded_file = params[:raw_video][:file]
       RawVideoService.create(file: uploaded_file, media_id: params[:raw_video][:media_id])
+
+      redirect_to admin_raw_videos_path
+    end
+
+    def update
+      uploaded_file = params[:raw_video][:file]
+      raise "id is required" unless params[:id]
+      RawVideoService.update(id: params[:id], file: uploaded_file, media_id: params[:raw_video][:media_id])
+
+      redirect_to admin_raw_video_path(params[:id])
     end
   end
 end

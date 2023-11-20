@@ -3,10 +3,10 @@ require 'uri'
 require 'json'
 
 class VideoConverterClient
-  def self.send_video(file:)
+  def self.send_video(file:, file_name: nil)
     original_filename = file.original_filename
     file_extension = File.extname(original_filename)
-    file_name = File.basename(SecureRandom.hex, file_extension)
+    file_name ||= File.basename(SecureRandom.hex, file_extension)
     uri = URI("#{VideoConverterClient.base_url}/raw-videos/send-video")
     uri.query = URI.encode_www_form(fileName: file_name, userUuid: VideoConverterClient.webhook_user_uuid)
     request = Net::HTTP::Put.new(uri)
@@ -82,7 +82,7 @@ class VideoConverterClient
   end
 
   def self.webhook_url
-    ENV['VIDEO_CONVERTER_WEBHOOK_URL'] || 'http://localhost:3000'
+    ENV['VIDEO_CONVERTER_WEBHOOK_URL'] || 'http://localhost:3000/api/v1/video_converter_webhook'
   end
 
   def self.base_url

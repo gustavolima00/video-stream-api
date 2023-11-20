@@ -64,7 +64,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_20_201853) do
   end
 
   create_table "subtitle_streams", force: :cascade do |t|
-    t.string "url"
+    t.string "path"
     t.string "language"
     t.string "name"
     t.bigint "media_id", null: false
@@ -90,7 +90,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_20_201853) do
   end
 
   create_table "video_streams", force: :cascade do |t|
-    t.string "url"
+    t.string "path"
     t.string "language"
     t.string "name"
     t.bigint "media_id", null: false
