@@ -81,12 +81,12 @@ class VideoConverterClient
     ]
   end
 
-  def self.webhook_url
-    ENV['VIDEO_CONVERTER_WEBHOOK_URL'] || 'http://localhost:3000/api/v1/video_converter_webhook'
-  end
-
   def self.base_url
     ENV['VIDEO_CONVERTER_BASE_URL'] || 'http://localhost:5275'
+  end
+
+  def self.webhook_url
+    ENV['VIDEO_CONVERTER_WEBHOOK_URL'] || "#{VideoConverterClient.base_url}/api/v1/video_converter_webhook"
   end
 
   def self.webhook_user_uuid

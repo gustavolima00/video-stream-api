@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: video_stream_api
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  api:
+    build: .
+    command: bin/rails server -b 0.0.0.0
+    environment:
+      RAILS_ENV: development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: db
+      BLOB_STORAGE_URL: "http://localhost:5000"
+      VIDEO_CONVERTER_WEBHOOK_URL: http://localhost:3000/api/v1/video_converter_webhook
+      VIDEO_CONVERTER_WEBHOOK_USER_UUID: "968565e6-61f6-45c6-ab68-963eb2c04428"
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"

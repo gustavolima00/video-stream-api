@@ -30,5 +30,9 @@ module VideoStreamApi
         resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
       end
     end
+
+    config.enable_dependency_loading = true
+    config.autoload_paths << Rails.root.join('app/serializers')
+    config.autoload_paths << Rails.root.join('app/services')
   end
 end
