@@ -4,6 +4,7 @@ require 'json'
 
 class VideoConverterClient
   def self.send_video(file:, file_name: nil)
+    VideoConverterClient.register_webhook_user
     original_filename = file.original_filename
     file_extension = File.extname(original_filename)
     file_name ||= File.basename(SecureRandom.hex, file_extension)
@@ -86,7 +87,7 @@ class VideoConverterClient
   end
 
   def self.webhook_url
-    ENV['VIDEO_CONVERTER_WEBHOOK_URL'] || "#{VideoConverterClient.base_url}/api/v1/video_converter_webhook"
+    ENV['VIDEO_CONVERTER_WEBHOOK_URL'] || "http://localhost:3000/api/v1/video_converter_webhook"
   end
 
   def self.webhook_user_uuid
