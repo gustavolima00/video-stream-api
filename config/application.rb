@@ -31,6 +31,13 @@ module VideoStreamApi
       end
     end
 
+    config.hosts = [
+      IPAddr.new("0.0.0.0/0"),        # All IPv4 addresses.
+      IPAddr.new("::/0"),             # All IPv6 addresses.
+      "localhost",                    # The localhost reserved domain.
+      ENV["RAILS_DEVELOPMENT_HOSTS"]  # Additional comma-separated hosts for development.
+    ]
+
     config.enable_dependency_loading = true
     config.autoload_paths << Rails.root.join('app/serializers')
     config.autoload_paths << Rails.root.join('app/services')

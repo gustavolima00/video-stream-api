@@ -1,4 +1,5 @@
 class Media < ApplicationRecord
+  table_name = "media"
   belongs_to :title
   has_many :video_streams
   has_many :subtitle_streams
